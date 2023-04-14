@@ -82,3 +82,51 @@ class DeleteField(APIView):
             field.delete()
             return Response({'Message': 'Success'}, status=status.HTTP_200_OK)
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetPublicOffice(APIView):
+    serializer_class = PublicOfficeSerializer
+    lookup_url_kwarg = 'id'
+
+    def get(self, request, format=None):
+        code = request.GET.get(self.lookup_url_kwarg)
+        if code != None:
+            room = PublicOffice.objects.filter(id=code)
+            if len(room) > 0:
+                data = PublicOfficeSerializer(room[0]).data
+                return Response(data.get('name'), status=status.HTTP_200_OK)
+            return Response({'Public Office Not Found': 'Invalid Public Office Name .'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({'Bad Request': 'Name paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetForm(APIView):
+    serializer_class = FormSerializer
+    lookup_url_kwarg = 'id'
+
+    def get(self, request, format=None):
+        id = request.GET.get(self.lookup_url_kwarg)
+        if id != None:
+            form = Form.objects.filter(id=id)
+            if len(form) > 0:
+                data = FormSerializer(form[0]).data
+                return Response(data.get('title'), status=status.HTTP_200_OK)
+            return Response({'Form Not Found': 'Invalid id.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({'Bad Request': 'id paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetField(APIView):
+    serializer_class = FieldSerializer
+    lookup_url_kwarg = 'id'
+
+    def get(self, request, format=None):
+        id = request.GET.get(self.lookup_url_kwarg)
+        if id != None:
+            field = Field.objects.filter(id=id)
+            if len(field) > 0:
+                data = FieldSerializer(field[0]).data
+                return Response([data.get('field_name'), data.get('description')], status=status.HTTP_200_OK)
+            return Response({'Form Not Found': 'Invalid Form title.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({'Bad Request': 'title paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)

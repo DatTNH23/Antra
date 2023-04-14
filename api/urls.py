@@ -8,5 +8,8 @@ urlpatterns = [
     path('create-form', CreateForm.as_view()),
     path('create-field', CreateField.as_view()),
     path('delete-form/<int:id>', DeleteForm.as_view()),
-    path('delete-field/<int:id>', DeleteField.as_view())
+    path('delete-field/<int:id>', DeleteField.as_view()),
+    path('get-public-office', GetPublicOffice.as_view()),
+    path('get-form', GetForm.as_view()),
+    path('get-field', GetField.as_view())
 ]

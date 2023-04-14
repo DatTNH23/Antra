@@ -5,7 +5,7 @@ from django.db import models
 
 class PublicOffice(models.Model):
 
-    name = models.CharField(max_length=50, unique=True, default='')
+    name = models.CharField(max_length=50, unique=True, default='', null=True)
 
 
 class Form(models.Model):
