@@ -5,6 +5,24 @@ const OfficePage = (props) => {
     const navigate = useNavigate()
     const [req, setReq] = useState('')
     const [title, setTitle] = useState('')
+    const [fields, setFields] = useState([{ id: 0, value: '' }]);
+    let fieldIdCounter = 1;
+    const handleFieldChange = (event, id) => {
+        const updatedFields = fields.map((field) =>
+            field.id === id ? { ...field, value: event.target.value } : field
+        );
+        setFields(updatedFields);
+    };
+
+    const handleAddField = () => {
+        setFields([...fields, { id: fieldIdCounter, value: '' }]);
+        fieldIdCounter++;
+    };
+
+    const handleDeleteField = (id) => {
+        const updatedFields = fields.filter((field) => field.id !== id);
+        setFields(updatedFields);
+    };
     const handleReqChange = (event) => {
         setReq(event.target.value);
     }
@@ -51,22 +69,43 @@ const OfficePage = (props) => {
     return (
         <div>
             <h1>Welcome {props.name_Auth}</h1>
+            <h1>Create a New Form</h1>
+            <label htmlFor="title">Form Title: </label>
             <input
                 type="text"
+                id="title"
                 value={title}
                 onChange={handleTitleChange}
-                placeholder="Title"
-            ></input>
-            <input
+                placeholder="Enter form title"
+            />
+            <br />
+            <div>
+                <h2>Form Fields:</h2>
+                {fields.map((field) => (
+                    <div key={field.id}>
+                        <input
+                            type="text"
+                            value={field.value}
+                            onChange={(event) => handleFieldChange(event, field.id)}
+                            placeholder="Enter field value"
+                        />
+                        <button onClick={() => handleDeleteField(field.id)}>Delete</button>
+                    </div>
+                ))}
+                <button onClick={handleAddField}>Add New Field</button>
+            </div>
+
+            {/* <input
                 type="text"
                 value={req}
                 onChange={handleReqChange}
                 placeholder="Forms"
-            ></input>
+            ></input> */}
             <button style={{ backgroundColor: 'red', color: 'white' }}
                 onClick={handleCreate}>
                 Create A Form
             </button>
+            <br />
             <button style={{ backgroundColor: 'blue', color: 'white' }}
                 onClick={() => navigate('/')}>
                 Back to home

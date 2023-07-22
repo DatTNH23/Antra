@@ -86,14 +86,14 @@ class DeleteField(APIView):
 
 class GetPublicOffice(APIView):
     serializer_class = PublicOfficeSerializer
-    lookup_url_kwarg = 'id'
+    lookup_url_kwarg = 'name'
 
     def get(self, request, format=None):
-        code = request.GET.get(self.lookup_url_kwarg)
-        if code != None:
-            room = PublicOffice.objects.filter(id=code)
-            if len(room) > 0:
-                data = PublicOfficeSerializer(room[0]).data
+        name = request.GET.get(self.lookup_url_kwarg)
+        if name != None:
+            office = PublicOffice.objects.filter(name=name)
+            if len(office) > 0:
+                data = PublicOfficeSerializer(office[0]).data
                 return Response(data.get('name'), status=status.HTTP_200_OK)
             return Response({'Public Office Not Found': 'Invalid Public Office Name .'}, status=status.HTTP_404_NOT_FOUND)
 

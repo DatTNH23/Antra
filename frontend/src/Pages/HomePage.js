@@ -5,14 +5,14 @@ const HomePage = (props) => {
     const navigate = useNavigate()
     return (
         <div>
-            <h1>Welcome to AntraPlus</h1>
+            <h1>Welcome to AntragPlus</h1>
             <br />
             <button style={{ backgroundColor: 'red', color: 'white' }}
                 onClick={() => navigate('/user')}>
                 User
             </button>
             <button style={{ backgroundColor: 'blue', color: 'white' }}
-                onClick={() => navigate('/create-office')}>
+                onClick={() => navigate('/login-office')}>
                 Public Office
             </button>
         </div>
