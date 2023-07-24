@@ -2,6 +2,8 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+
 from .models import *
 from .Serializers import *
 # Create your views here.
@@ -94,7 +96,7 @@ class GetPublicOffice(APIView):
             office = PublicOffice.objects.filter(name=name)
             if len(office) > 0:
                 data = PublicOfficeSerializer(office[0]).data
-                return Response(data.get('name'), status=status.HTTP_200_OK)
+                return Response(data, status=status.HTTP_200_OK)
             return Response({'Public Office Not Found': 'Invalid Public Office Name .'}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({'Bad Request': 'Name paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)
@@ -106,11 +108,12 @@ class GetForm(APIView):
 
     def get(self, request, format=None):
         id = request.GET.get(self.lookup_url_kwarg)
+        print(id)
         if id != None:
-            form = Form.objects.filter(id=id)
-            if len(form) > 0:
-                data = FormSerializer(form[0]).data
-                return Response(data.get('title'), status=status.HTTP_200_OK)
+            forms = Form.objects.filter(office_id=id)
+            if forms.exists():
+                data = FormSerializer(forms, many=True).data
+                return Response(data, status=status.HTTP_200_OK)
             return Response({'Form Not Found': 'Invalid id.'}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({'Bad Request': 'id paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)

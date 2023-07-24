@@ -10,7 +10,6 @@ const OfficeLogin = () => {
     const handleSearch = async () => {
         try {
             const response = await fetch(baseURL + `?name=${searchTerm}`)
-            const responseJSON = await response.json()
             if (response.status == 200)
                 navigate('/office')
         } catch (error) {

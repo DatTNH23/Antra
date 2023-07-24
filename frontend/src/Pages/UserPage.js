@@ -1,29 +1,33 @@
 import React, { useEffect, useState } from "react";
-
+import SearchBar from "../components/SearchBar";
 const UserPage = (props) => {
+    const [formsList, setFormsList] = useState([])
+    const baseURL = 'http://127.0.0.1:8000/api/';
 
-    const [values, setValues] = useState(Array(10).fill(''));
+    const handleSearch = async (searchTerm) => {
+        try {
+            const office = await fetch(baseURL + `get-public-office?name=${searchTerm}`)
+            const jsonOffice = await office.json()
+            const forms = await fetch(baseURL + `get-form?id=${jsonOffice.id}`)
+            const jsonForms = await forms.json()
+            setFormsList(jsonForms)
+        } catch (error) {
+            //window.alert('Office is not existed');
+            console.log(error)
+        }
+    }
+    useEffect(() => {
 
-    const handleInputChange = (index, event) => {
-        const newValues = [...values];
-        newValues[index] = event.target.value;
-        setValues(newValues);
-    };
-
+    }, [formsList]);
     return (
         <div>
-            {values.map((value, index) => (
-                <div>
-                    <input
-                        key={index}
-                        value={value}
-                        onChange={(event) => handleInputChange(index, event)}
-                        placeholder={index}
-                    />
-                    <br /></div>
-
+            <SearchBar onSearch={handleSearch} />
+            <br />
+            {formsList.map((value, index) => (
+                <button style={{ marginRight: '5px', background: 'green' }}>
+                    {value.title}
+                </button>
             ))}
-            <button>Submit Form</button>
         </div>
     );
 
